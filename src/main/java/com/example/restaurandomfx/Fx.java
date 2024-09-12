@@ -27,7 +27,6 @@ public class Fx extends Application {
         HBox hBox = new HBox();
         Scene scene = new Scene(root, 1000, 500);
         Button btn1 = new Button("Get Random Restaurant");
-        Button btn2 = new Button("Get another Random Restaurant");
         HBox hBox2 = new HBox();
         HBox hBoxImage = new HBox();
 
@@ -67,7 +66,9 @@ root.setStyle("-fx-background-color: #1E1E1E"); //Dark-Gray
                 randomRestaurant.setLayoutY(scene.getHeight() / 2 -80);
                 randomRestaurant.setTextFill(Color.WHITE);
                 root.setCenter(randomRestaurant);
-                hBox2.getChildren().add(btn2);
+                btn1.setText("Reroll another Restaurant");
+                hBox2.getChildren().clear();
+                hBox2.getChildren().add(btn1);
                 hBox2.setAlignment(Pos.CENTER);
                 hBox2.setPadding(new Insets(0, 0 , 20, 0));
 
@@ -75,6 +76,7 @@ root.setStyle("-fx-background-color: #1E1E1E"); //Dark-Gray
                 loadingImage.setMinHeight(scene.getHeight() * 0.3);
                 loadingImage.setTextFill(Color.WHITE);
                 loadingImage.setAlignment(Pos.CENTER);
+                hBoxImage.getChildren().clear();
                 hBoxImage.getChildren().add(loadingImage);
                 hBoxImage.setAlignment(Pos.CENTER);
 
@@ -100,53 +102,6 @@ root.setStyle("-fx-background-color: #1E1E1E"); //Dark-Gray
                 });
 
                 new Thread(loadImageTask).start();
-
-
-                primaryStage.show();
-            }
-        });
-
-        btn2.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                hBoxImage.getChildren().clear();
-                Restaurant restaurant = Main.chooseOne(Main.readRestaurants());
-
-                Label randomRestaurant = new Label(restaurant.toString());
-                randomRestaurant.setFont(Font.font("Arial", FontWeight.BOLD, scene.getWidth() / 30));
-                randomRestaurant.setLayoutX(80);
-                randomRestaurant.setLayoutY(scene.getHeight() / 2 -80);
-                randomRestaurant.setTextFill(Color.WHITE);
-
-                root.setCenter(randomRestaurant);
-
-                Label loadingImage = new Label("Loading Image");
-
-                root.setBottom(hBox2);
-                root.setTop(loadingImage);
-
-                Task<Image> loadImageTask2 = new Task<>() {
-                    @Override
-                    protected Image call() {
-                        return new Image(restaurant.getImage_url());
-                    }        };
-
-
-
-                loadImageTask2.setOnSucceeded(event1 -> {
-                    imageView.setImage(loadImageTask2.getValue());
-                    imageView.setPreserveRatio(true);
-                    imageView.setFitHeight(scene.getHeight() * 0.3);
-                    hBoxImage.getChildren().add(imageView);
-                    hBoxImage.setAlignment(Pos.CENTER);
-                    root.setTop(hBoxImage);
-                });
-
-                new Thread(loadImageTask2).start();
-
-
-
-                root.setTop(hBoxImage);
 
 
                 primaryStage.show();
