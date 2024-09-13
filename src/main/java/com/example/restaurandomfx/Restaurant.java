@@ -13,6 +13,11 @@ public class Restaurant {
     public Restaurant() {
     }
 
+    public Restaurant(String name, String image_url) {
+        this.name = name;
+        this.image_url = image_url;
+    }
+
     public Restaurant(String name, String openingHours, double distance, String image_url, boolean isOpen, String price, String address, String cuisine) {
         this.name = name;
         this.openingHours = openingHours;
@@ -95,6 +100,10 @@ public class Restaurant {
                 "km\nPrice: " + price +
                 "\nIs it open?: " + isOpen + "\nOpening Hours: " + openingHours;
 //                "\nImage: " + image +       das bild wird später noch relevant
+    }
+
+    public String toString2() {
+        return "No more Restaurants available";
     }
 }
 

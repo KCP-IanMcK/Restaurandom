@@ -7,28 +7,49 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Fx extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
+        List<String> cuisines;
+        cuisines = Main.availableCuisines(Main.readRestaurants());
 
-        //GridPane root = new GridPane();
+
         BorderPane root = new BorderPane();
         HBox hBox = new HBox();
         Scene scene = new Scene(root, 1000, 500);
         Button btn1 = new Button("Get Random Restaurant");
-        HBox hBox2 = new HBox();
+        HBox hBox2 = new HBox(scene.getWidth() / 50);
         HBox hBoxImage = new HBox();
+        List<CheckBox> checkBoxes = new ArrayList<>();
+
+        VBox vbox = new VBox();
+        CheckBox checkBox1 = new CheckBox("Select all");
+        vbox.getChildren().add(checkBox1);
+        checkBoxes.add(checkBox1);
+
+        for (String cuisine : cuisines) {
+            CheckBox checkBox = new CheckBox(cuisine);
+            vbox.getChildren().add(checkBox);
+            checkBoxes.add(checkBox);
+        }
+
+
+        ScrollPane scrollPane = new ScrollPane(vbox);
+        scrollPane.setMinWidth(scene.getWidth() / 10);
+        scrollPane.setMaxHeight(scene.getHeight() / 5);
 
 
 
@@ -42,8 +63,13 @@ public class Fx extends Application {
         hBox.setPadding(new Insets(20, 0, 0, 0));
 
 
+
+        hBox2.getChildren().add(btn1);
+        hBox2.getChildren().add(scrollPane);
+        hBox2.setAlignment(Pos.CENTER);
+
         root.setTop(hBox);
-        root.setCenter(btn1);
+        root.setCenter(hBox2);
 
 root.setStyle("-fx-background-color: #1E1E1E"); //Dark-Gray
 
@@ -58,9 +84,23 @@ root.setStyle("-fx-background-color: #1E1E1E"); //Dark-Gray
         btn1.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                Restaurant restaurant = Main.chooseOne(Main.readRestaurants());
+                List<String> desiredCuisines = new ArrayList<>();
 
-                Label randomRestaurant = new Label(restaurant.toString());
+                for (CheckBox checkBox : checkBoxes ) {
+                    if(checkBox.isSelected()) {
+                        desiredCuisines.add(checkBox.getText());
+                    }
+                }
+
+                Restaurant restaurant = Main.chooseOne(Main.readRestaurants(), desiredCuisines);
+                Label randomRestaurant = new Label();
+
+                if(!restaurant.getName().equals("noRestaurant")){
+                randomRestaurant.setText(restaurant.toString());
+                }
+                else {
+                    randomRestaurant.setText(restaurant.toString2());
+                }
                 randomRestaurant.setFont(Font.font("Arial", FontWeight.BOLD, scene.getWidth() / 30));
                 randomRestaurant.setLayoutX(80);
                 randomRestaurant.setLayoutY(scene.getHeight() / 2 -80);
