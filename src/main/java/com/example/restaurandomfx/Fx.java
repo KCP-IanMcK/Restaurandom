@@ -19,14 +19,20 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Fx extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        List<String> cuisines;
-        cuisines = Main.availableCuisines(Main.readRestaurants());
+        List<String> cuisines = new ArrayList<>();
+        String[] array = {"Chinese", "Italian", "Fast Food", "Indian"};
 
+        Collections.addAll(cuisines, array);
+
+//        cuisines = Main.availableCuisines(Main.readRestaurants());
+        GoogleAPIRequest.googleAPIRequest();
+        Main.readRestaurants();
 
         BorderPane root = new BorderPane();
         HBox hBox = new HBox();
@@ -70,16 +76,13 @@ public class Fx extends Application {
 
         root.setTop(hBox);
         root.setCenter(hBox2);
-
         root.setStyle("-fx-background-color: #1E1E1E"); //Dark-Gray
-
 
         primaryStage.setScene(scene);
         primaryStage.setTitle("Restaurandom Application");
         primaryStage.show();
 
         ImageView imageView = new ImageView();
-
 
         btn1.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -100,15 +103,13 @@ public class Fx extends Application {
                     btn1.setText("Reroll another Restaurant");
                     hBox2.getChildren().clear();
                     hBox2.getChildren().add(btn1);
-                    hBox2.setAlignment(Pos.CENTER);
-                    hBox2.setPadding(new Insets(0, 0, 20, 0));
                 } else {
                     randomRestaurant.setText(restaurant.toString2());
                     hBox2.getChildren().clear();
                     hBox2.getChildren().add(resetBtn);
-                    hBox2.setAlignment(Pos.CENTER);
-                    hBox2.setPadding(new Insets(0, 0, 20, 0));
                 }
+                hBox2.setAlignment(Pos.CENTER);
+                hBox2.setPadding(new Insets(0, 0, 20, 0));
                 randomRestaurant.setFont(Font.font("Arial", FontWeight.BOLD, scene.getWidth() / 30));
                 randomRestaurant.setLayoutX(80);
                 randomRestaurant.setLayoutY(scene.getHeight() / 2 - 80);
@@ -127,24 +128,24 @@ public class Fx extends Application {
                 root.setBottom(hBox2);
                 root.setTop(hBoxImage);
 
-                Task<Image> loadImageTask = new Task<>() {
-                    @Override
-                    protected Image call() {
-                        return new Image(restaurant.getImage_url());
-                    }
-                };
+//                Task<Image> loadImageTask = new Task<>() {
+//                    @Override
+//                    protected Image call() {
+//                        return new Image(restaurant.getImage_url());
+//                    }
+//                };
 
 
-                loadImageTask.setOnSucceeded(event -> {imageView.setImage(loadImageTask.getValue());
-                    imageView.setPreserveRatio(true);
-                    imageView.setFitHeight(scene.getHeight() * 0.3);
-                    hBoxImage.getChildren().clear();
-                    hBoxImage.getChildren().add(imageView);
-                    hBoxImage.setAlignment(Pos.CENTER);
-                    root.setTop(hBoxImage);
-                });
-
-                new Thread(loadImageTask).start();
+//                loadImageTask.setOnSucceeded(event -> {imageView.setImage(loadImageTask.getValue());
+//                    imageView.setPreserveRatio(true);
+//                    imageView.setFitHeight(scene.getHeight() * 0.3);
+//                    hBoxImage.getChildren().clear();
+//                    hBoxImage.getChildren().add(imageView);
+//                    hBoxImage.setAlignment(Pos.CENTER);
+//                    root.setTop(hBoxImage);
+//                });
+//
+//                new Thread(loadImageTask).start();
 
 
                 primaryStage.show();
@@ -163,5 +164,4 @@ public class Fx extends Application {
             }
         });
     }
-
 }

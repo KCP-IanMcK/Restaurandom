@@ -2,31 +2,24 @@ package com.example.restaurandomfx;
 
 public class Restaurant {
     public String name;
-    public String cuisine;
-    public String address;
-    public String price;
-    public boolean isOpen;
-    public String image_url;
-    public double distance;
-    public String openingHours;
+    public String vicinity;
+    public int price_level;
+    //public String image_url; //photos -> photo_reference
+//    public double distance;
+    public boolean open_now; //opening_hours
 
     public Restaurant() {
     }
 
-    public Restaurant(String name, String image_url) {
+    public Restaurant(String name) {
         this.name = name;
-        this.image_url = image_url;
     }
 
-    public Restaurant(String name, String openingHours, double distance, String image_url, boolean isOpen, String price, String address, String cuisine) {
+    public Restaurant(String name, String vicinity, int price_level, boolean open_now) {
         this.name = name;
-        this.openingHours = openingHours;
-        this.distance = distance;
-        this.image_url = image_url;
-        this.isOpen = isOpen;
-        this.price = price;
-        this.address = address;
-        this.cuisine = cuisine;
+        this.vicinity = vicinity;
+        this.price_level = price_level;
+        this.open_now = open_now;
     }
 
     public String getName() {
@@ -37,69 +30,37 @@ public class Restaurant {
         this.name = name;
     }
 
-    public String getCuisine() {
-        return cuisine;
+    public String getVicinity() {
+        return vicinity;
     }
 
-    public void setCuisine(String cuisine) {
-        this.cuisine = cuisine;
+    public void setVicinity(String vicinity) {
+        this.vicinity = vicinity;
     }
 
-    public String getAddress() {
-        return address;
+    public int getPrice_level() {
+        return price_level;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setPrice_level(int price_level) {
+        this.price_level = price_level;
     }
 
-    public String getPrice() {
-        return price;
+    public boolean isOpen_now() {
+        return open_now;
     }
 
-    public void setPrice(String price) {
-        this.price = price;
-    }
-
-    public boolean isOpen() {
-        return isOpen;
-    }
-
-    public void setOpen(boolean open) {
-        isOpen = open;
-    }
-
-    public String getImage_url() {
-        return image_url;
-    }
-
-    public void setImage_url(String image_url) {
-        this.image_url = image_url;
-    }
-
-    public double getDistance() {
-        return distance;
-    }
-
-    public void setDistance(double distance) {
-        this.distance = distance;
-    }
-
-    public String getOpeningHours() {
-        return openingHours;
-    }
-
-    public void setOpeningHours(String openingHours) {
-        this.openingHours = openingHours;
+    public void setOpen_now(boolean open_now) {
+        this.open_now = open_now;
     }
 
     @Override
     public String toString() {
-        return "Restaurant: " + name +"\nCuisine: " + cuisine +
-                "\nAddress: " + address + "\nDistance: " + distance +
-                "km\nPrice: " + price +
-                "\nIs it open?: " + isOpen + "\nOpening Hours: " + openingHours;
-//                "\nImage: " + image +       das bild wird später noch relevant
+        return "Name: " + name +
+                "\nAdress: " + vicinity +
+                "\nPrice Level: " + price_level +
+//                "\nDistance: " + distance +
+                "\nOpen Now: " + open_now;
     }
 
     public String toString2() {
