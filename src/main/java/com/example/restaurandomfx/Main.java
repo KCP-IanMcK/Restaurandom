@@ -10,7 +10,7 @@ import com.google.gson.GsonBuilder;
 
 public class Main extends Fx {
 
-    private static boolean firstTime = true;
+    static boolean firstTime = true;
     private static final List<Restaurant> availableOptions = new ArrayList<>();
 
     public static List<String> availableCuisines(Restaurant[] restaurants){
