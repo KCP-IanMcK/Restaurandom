@@ -1,12 +1,17 @@
 package com.example.restaurandomfx;
 
+import com.google.gson.JsonObject;
+
 public class Restaurant {
     public String name;
     public String vicinity;
     public int price_level;
     //public String image_url; //photos -> photo_reference
 //    public double distance;
-    public boolean open_now; //opening_hours
+    public JsonObject opening_hours; //opening_hours
+    public Boolean open_now;
+    public JsonObject photos;
+    public String photo_reference;
 
     public Restaurant() {
     }
@@ -15,11 +20,12 @@ public class Restaurant {
         this.name = name;
     }
 
-    public Restaurant(String name, String vicinity, int price_level, boolean open_now) {
+    public Restaurant(String name, String vicinity, int price_level, JsonObject opening_hours, JsonObject photos) {
         this.name = name;
         this.vicinity = vicinity;
         this.price_level = price_level;
-        this.open_now = open_now;
+        this.opening_hours = opening_hours;
+        this.photos = photos;
     }
 
     public String getName() {
@@ -46,21 +52,42 @@ public class Restaurant {
         this.price_level = price_level;
     }
 
-    public boolean isOpen_now() {
-        return open_now;
-    }
-
-    public void setOpen_now(boolean open_now) {
-        this.open_now = open_now;
-    }
-
     @Override
     public String toString() {
-        return "Name: " + name +
-                "\nAdress: " + vicinity +
-                "\nPrice Level: " + price_level +
+        this.open_now = opening_hours.get("open_now").getAsBoolean();
+        this.photo_reference = photos.get("photo_reference").getAsString();
+        String priceLevelString = "";
+        String openNowString;
+        if(open_now){
+            openNowString = "Currently Open";
+        } else{
+            openNowString = "Currently Closed";
+        }
+        switch (price_level){
+            case 0:
+                priceLevelString = "No Information";
+                break;
+            case 1:
+                priceLevelString = "$";
+                break;
+            case 2:
+                priceLevelString = "$$";
+                break;
+            case 3:
+                priceLevelString = "$$$";
+                break;
+            case 4:
+                priceLevelString = "$$$$";
+                break;
+            default:
+                priceLevelString = String.valueOf(price_level);
+        }
+
+        return name +
+                "\n" + vicinity +
+                "\nPrice Level: " + priceLevelString +
 //                "\nDistance: " + distance +
-                "\nOpen Now: " + open_now;
+                "\n" + openNowString;
     }
 
     public String toString2() {

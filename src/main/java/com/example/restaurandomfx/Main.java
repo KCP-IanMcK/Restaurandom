@@ -14,23 +14,13 @@ public class Main extends Fx {
     static boolean firstTime = true;
     private static final List<Restaurant> availableOptions = new ArrayList<>();
 
-//    public static List<String> availableCuisines(Restaurant[] restaurants) { //ev entfernen
-//        List<String> cuisines = new ArrayList<>();
-//        for (Restaurant restaurant : restaurants) {
-//            if (!cuisines.contains(restaurant.getCuisine())) {
-//                cuisines.add(restaurant.getCuisine());
-//            }
-//        }
-//        return cuisines;
-//    }
-
     public static Restaurant[] readRestaurants() {
         Gson gson = new GsonBuilder()
                 .create();
 
         Restaurant[] restaurants = new Restaurant[50]; // Grösse des Arrays anpassen
 
-        try (Reader reader = new FileReader("src/main/java/com/example/restaurandomfx/restaurant1.json")) {
+        try (Reader reader = new FileReader("output.json")) { //src/main/java/com/example/restaurandomfx/restaurant1.json
 
             restaurants = gson.fromJson(reader, Restaurant[].class);
 

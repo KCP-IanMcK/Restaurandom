@@ -1,6 +1,8 @@
 package com.example.restaurandomfx;
 
 import java.io.BufferedReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -41,19 +43,27 @@ public class GoogleAPIRequest {
             JSONObject jsonResponse = new JSONObject(content.toString());
             JSONArray results = jsonResponse.getJSONArray("results");
 
-            for (int i = 0; i < results.length(); i++) {
-                JSONObject place = results.getJSONObject(i);
-                restaurantList.add(place);
-                System.out.println("Name: " + place.getString("name"));
-                System.out.println("Address: " + place.getString("vicinity"));
-                try {
-                    System.out.println("Price Level: " + place.getBigInteger("price_level"));
-                }catch (Exception e){}
-//                System.out.println("Distance: " + place.getDouble("distance"));
-                try {
-                    System.out.println("Open Now: " + place.getJSONObject("opening_hours").getBoolean("open_now"));
-                }catch (Exception e){}
+            try(FileWriter file = new FileWriter("output.json")){
+                file.write(results.toString(4));
+                file.flush();
+            } catch (IOException e){
+                e.printStackTrace();
             }
+
+//            for (int i = 0; i < results.length(); i++) {
+//                JSONObject place = results.getJSONObject(i);
+//                restaurantList.add(place);
+//
+//                System.out.println("Name: " + place.getString("name"));
+//                System.out.println("Address: " + place.getString("vicinity"));
+//                try {
+//                    System.out.println("Price Level: " + place.getBigInteger("price_level"));
+//                }catch (Exception e){}
+////                System.out.println("Distance: " + place.getDouble("distance"));
+//                try {
+//                    System.out.println("Open Now: " + place.getJSONObject("opening_hours").getBoolean("opening_hours"));
+//                }catch (Exception e){}
+//            }
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -30,7 +30,6 @@ public class Fx extends Application {
 
         Collections.addAll(cuisines, array);
 
-//        cuisines = Main.availableCuisines(Main.readRestaurants());
         GoogleAPIRequest.googleAPIRequest();
         Main.readRestaurants();
 
