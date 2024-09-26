@@ -19,7 +19,6 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,13 +27,9 @@ public class Fx extends Application {
     public void start(Stage primaryStage) throws Exception {
         List<String> cuisines = new ArrayList<>();
         String[] array = {"Chinese", "Italian", "Fast Food", "Indian"};
-        String[] locations = {"Oerlikon", "Stadelhofen", "Zürich Zentrum", "Bülach", "Embrach", "Winterthur", "Oberglatt", "Eglisau", "Rümlang"};
-
-
         Collections.addAll(cuisines, array);
+        String[] locations = {"Oerlikon", "Zürich Zentrum", "Bülach", "Embrach", "Winterthur", "Oberglatt", "Eglisau", "Rümlang"};
 
-        //GoogleAPIRequest.googleAPIRequest(); -> muss unten sein, damit man Parameter mitgeben kann
-        //Main.readRestaurants();
 
         BorderPane root = new BorderPane();
         HBox hBox = new HBox();
@@ -45,8 +40,9 @@ public class Fx extends Application {
         HBox hBoxImage = new HBox();
         List<CheckBox> checkBoxesCuisines = new ArrayList<>();
         List<RadioButton> radioButtonLocation = new ArrayList<>();
-        ToggleGroup toggleGroup = new ToggleGroup();
+        ToggleGroup toggleGroup = new ToggleGroup(); //Für RadioButtons
 
+        //Cuisine Component ----------------------------------------------------
         VBox wrapCuisines = new VBox();
         wrapCuisines.setAlignment(Pos.CENTER);
         VBox vboxCuisines = new VBox();
@@ -61,6 +57,16 @@ public class Fx extends Application {
             checkBoxesCuisines.add(checkBox);
         }
 
+        ScrollPane scrollPaneCuisines = new ScrollPane(vboxCuisines);
+        scrollPaneCuisines.setMinWidth(scene.getWidth() / 10);
+        scrollPaneCuisines.setMaxHeight(scene.getHeight() / 5);
+        Label cuisineLabel = new Label("Cuisine:");
+        cuisineLabel.setTextFill(Color.WHITE);
+        cuisineLabel.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, scene.getWidth() / 50));
+        wrapCuisines.getChildren().add(cuisineLabel);
+        wrapCuisines.getChildren().add(scrollPaneCuisines);
+
+        //Locations Component ----------------------------------------------------
         VBox wrapLocations = new VBox();
         wrapLocations.setAlignment(Pos.CENTER);
         VBox vBoxLocations = new VBox();
@@ -71,16 +77,7 @@ public class Fx extends Application {
             radioButtonLocation.add(radioButton);
             radioButton.setToggleGroup(toggleGroup);
         }
-        radioButtonLocation.get(0).setSelected(true);
-
-        ScrollPane scrollPaneCuisines = new ScrollPane(vboxCuisines);
-        scrollPaneCuisines.setMinWidth(scene.getWidth() / 10);
-        scrollPaneCuisines.setMaxHeight(scene.getHeight() / 5);
-        Label cuisineLabel = new Label("Cuisine:");
-        cuisineLabel.setTextFill(Color.WHITE);
-        cuisineLabel.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, scene.getWidth() / 50));
-        wrapCuisines.getChildren().add(cuisineLabel);
-        wrapCuisines.getChildren().add(scrollPaneCuisines);
+        radioButtonLocation.getFirst().setSelected(true);
 
         ScrollPane scrollPaneLocations = new ScrollPane(vBoxLocations);
         Label locationLabel = new Label("Location:");
@@ -91,16 +88,16 @@ public class Fx extends Application {
         wrapLocations.getChildren().add(locationLabel);
         wrapLocations.getChildren().add(scrollPaneLocations);
 
+
+        //Titel --------------------------------------------------------------------
         Label label = new Label("Restaurandom");
         label.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, scene.getWidth() / 20)); //Groesse sollte dem Fenster angepasst sein
         label.setTextFill(Color.web("#FFFFFF")); //White
-
-
         hBox.getChildren().add(label);
         hBox.setAlignment(Pos.CENTER);
         hBox.setPadding(new Insets(20, 0, 0, 0));
 
-
+        //Adding all middle Components ----------------------------------------------
         hBox2.getChildren().add(wrapLocations);
         hBox2.getChildren().add(btn1);
         hBox2.getChildren().add(wrapCuisines);
@@ -116,11 +113,13 @@ public class Fx extends Application {
 
         ImageView imageView = new ImageView();
 
+        //Reroll-Button Logic --------------------------------------------------------
         btn1.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 List<String> desiredCuisines = new ArrayList<>();
                 String location = "";
+
 
                 for (CheckBox checkBox : checkBoxesCuisines) {
                     if (checkBox.isSelected()) {
@@ -134,9 +133,9 @@ public class Fx extends Application {
                     }
                 }
 
-                System.out.println("Sending to Google API");
-                GoogleAPIRequest.googleAPIRequest(desiredCuisines, location, array);
-
+                if(Main.firstTime) { //Muss nur das erste mal eine Request senden, nachher kannn es das Json auslesen
+                    GoogleAPIRequest.googleAPIRequest(desiredCuisines, location, array);
+                }
 
                 Restaurant restaurant = Main.chooseOne(Main.readRestaurants(), desiredCuisines);
                 String photoReference = restaurant.getPhotoReference();
@@ -150,7 +149,7 @@ public class Fx extends Application {
                     btn1.setText("Reroll another Restaurant");
                     hBox2.getChildren().clear();
                     hBox2.getChildren().add(btn1);
-                } else {
+                } else {                                                //Wenn es keine weiteren Restaurants hat
                     randomRestaurant.setText(restaurant.toString2());
                     hBox2.getChildren().clear();
                     hBox2.getChildren().add(resetBtn);
@@ -164,6 +163,7 @@ public class Fx extends Application {
                 root.setCenter(randomRestaurant);
 
 
+                //Image Component --------------------------------------------------------
                 Label loadingImage = new Label("Loading Image");
                 loadingImage.setMinHeight(scene.getHeight() * 0.3);
                 loadingImage.setTextFill(Color.WHITE);

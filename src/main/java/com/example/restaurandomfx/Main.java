@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.gson.GsonBuilder;
@@ -20,7 +21,7 @@ public class Main extends Fx {
 
         Restaurant[] restaurants = new Restaurant[50]; // Grösse des Arrays anpassen
 
-        try (Reader reader = new FileReader("output.json")) { //src/main/java/com/example/restaurandomfx/restaurant1.json
+        try (Reader reader = new FileReader("output.json")) {
 
             restaurants = gson.fromJson(reader, Restaurant[].class);
 
@@ -35,15 +36,10 @@ public class Main extends Fx {
         if (firstTime) {
             if (desiredCuisines.getFirst().equals("Select all")) {
                 availableOptions.addAll(Arrays.asList(restaurants));
-                firstTime = false;
             } else {
-                for (Restaurant restaurant : restaurants) {
-                    //if (desiredCuisines.contains(restaurant.getCuisine())) {
-                        availableOptions.add(restaurant);
-                    //}
-                }
-                firstTime = false;
+                Collections.addAll(availableOptions, restaurants);
             }
+            firstTime = false;
         }
 
         int randomNumber = (int) Math.round(Math.random() * (availableOptions.size() - 1));
@@ -53,7 +49,7 @@ public class Main extends Fx {
             availableOptions.remove(randomNumber);
             return choice;
         } catch (IndexOutOfBoundsException e) {
-            return new Restaurant("noRestaurant"); //"https://i.kym-cdn.com/entries/icons/original/000/043/047/sad_emoji_meme.jpg"
+            return new Restaurant("noRestaurant"); //IMG: Sad Emoji
         }
     }
 
