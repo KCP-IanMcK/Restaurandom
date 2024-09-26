@@ -15,11 +15,20 @@ public class GoogleAPIRequest {
 
     public static List<JSONObject> restaurantList;
 
-    public static void googleAPIRequest() {
+    public static void googleAPIRequest(List<String> desiredCuisines, String locationString, String[] allCuisines) {
         String apiKey = "AIzaSyBOklWQxqMKLHvS_slwXrMGpC9RPgI01cc";
-        String location = "47.3769,8.5417"; //geoLocation einfügen?
+        String location = LocationGetter.getLocation(locationString); //geoLocation einfügen?
         int radius = 200;
-        String keyword = "Chinese"; // hier Cuisines einfügen
+        String finalDesiredCuisines = "";
+        if(desiredCuisines.toString().equals("[Select all]")) {
+            desiredCuisines.addAll(List.of(allCuisines));
+            desiredCuisines.remove("Select all");
+        }
+        for (String desiredCuisine : desiredCuisines) {
+            finalDesiredCuisines += desiredCuisine;
+        }
+        String keyword = finalDesiredCuisines; // schauen, obs funktioniert
+        System.out.println("Desired cuisines: " + desiredCuisines);
         try {
             String urlString = String.format(
                     "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%s&radius=%d&type=restaurant&keyword=%s&fields=name,formatted_address,types,photos,price_level,opening_hours,geometry&key=%s",
@@ -50,20 +59,6 @@ public class GoogleAPIRequest {
                 e.printStackTrace();
             }
 
-//            for (int i = 0; i < results.length(); i++) {
-//                JSONObject place = results.getJSONObject(i);
-//                restaurantList.add(place);
-//
-//                System.out.println("Name: " + place.getString("name"));
-//                System.out.println("Address: " + place.getString("vicinity"));
-//                try {
-//                    System.out.println("Price Level: " + place.getBigInteger("price_level"));
-//                }catch (Exception e){}
-////                System.out.println("Distance: " + place.getDouble("distance"));
-//                try {
-//                    System.out.println("Open Now: " + place.getJSONObject("opening_hours").getBoolean("opening_hours"));
-//                }catch (Exception e){}
-//            }
         } catch (Exception e) {
             e.printStackTrace();
         }

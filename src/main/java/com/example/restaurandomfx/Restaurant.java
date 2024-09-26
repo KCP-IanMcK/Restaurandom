@@ -1,16 +1,15 @@
 package com.example.restaurandomfx;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 public class Restaurant {
     public String name;
     public String vicinity;
     public int price_level;
-    //public String image_url; //photos -> photo_reference
-//    public double distance;
-    public JsonObject opening_hours; //opening_hours
+    public JsonObject opening_hours;
     public Boolean open_now;
-    public JsonObject photos;
+    public JsonArray photos;
     public String photo_reference;
 
     public Restaurant() {
@@ -20,7 +19,7 @@ public class Restaurant {
         this.name = name;
     }
 
-    public Restaurant(String name, String vicinity, int price_level, JsonObject opening_hours, JsonObject photos) {
+    public Restaurant(String name, String vicinity, int price_level, JsonObject opening_hours, JsonArray photos) {
         this.name = name;
         this.vicinity = vicinity;
         this.price_level = price_level;
@@ -52,13 +51,24 @@ public class Restaurant {
         this.price_level = price_level;
     }
 
+    public String getPhotoReference(){
+        if(photos != null) {
+            JsonObject item = photos.get(0).getAsJsonObject();
+            this.photo_reference = item.get("photo_reference").getAsString();
+        }
+        return photo_reference;
+    }
+
     @Override
     public String toString() {
-        this.open_now = opening_hours.get("open_now").getAsBoolean();
-        this.photo_reference = photos.get("photo_reference").getAsString();
+        if(opening_hours != null) {
+            this.open_now = opening_hours.get("open_now").getAsBoolean();
+        }
         String priceLevelString = "";
         String openNowString;
-        if(open_now){
+        if(opening_hours == null) {
+            openNowString = "No Information about opening hours";
+        } else if(open_now){
             openNowString = "Currently Open";
         } else{
             openNowString = "Currently Closed";

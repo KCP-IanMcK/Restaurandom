@@ -19,6 +19,7 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -27,11 +28,13 @@ public class Fx extends Application {
     public void start(Stage primaryStage) throws Exception {
         List<String> cuisines = new ArrayList<>();
         String[] array = {"Chinese", "Italian", "Fast Food", "Indian"};
+        String[] locations = {"Oerlikon", "Stadelhofen", "Zürich Zentrum", "Bülach", "Embrach", "Winterthur", "Oberglatt", "Eglisau", "Rümlang"};
+
 
         Collections.addAll(cuisines, array);
 
-        GoogleAPIRequest.googleAPIRequest();
-        Main.readRestaurants();
+        //GoogleAPIRequest.googleAPIRequest(); -> muss unten sein, damit man Parameter mitgeben kann
+        //Main.readRestaurants();
 
         BorderPane root = new BorderPane();
         HBox hBox = new HBox();
@@ -40,24 +43,53 @@ public class Fx extends Application {
         Button resetBtn = new Button("Reset");
         HBox hBox2 = new HBox(scene.getWidth() / 50);
         HBox hBoxImage = new HBox();
-        List<CheckBox> checkBoxes = new ArrayList<>();
+        List<CheckBox> checkBoxesCuisines = new ArrayList<>();
+        List<RadioButton> radioButtonLocation = new ArrayList<>();
+        ToggleGroup toggleGroup = new ToggleGroup();
 
-        VBox vbox = new VBox();
+        VBox wrapCuisines = new VBox();
+        wrapCuisines.setAlignment(Pos.CENTER);
+        VBox vboxCuisines = new VBox();
         CheckBox checkBox1 = new CheckBox("Select all");
-        vbox.getChildren().add(checkBox1);
-        checkBoxes.add(checkBox1);
+        vboxCuisines.getChildren().add(checkBox1);
+
+        checkBoxesCuisines.add(checkBox1);
 
         for (String cuisine : cuisines) {
             CheckBox checkBox = new CheckBox(cuisine);
-            vbox.getChildren().add(checkBox);
-            checkBoxes.add(checkBox);
+            vboxCuisines.getChildren().add(checkBox);
+            checkBoxesCuisines.add(checkBox);
         }
 
+        VBox wrapLocations = new VBox();
+        wrapLocations.setAlignment(Pos.CENTER);
+        VBox vBoxLocations = new VBox();
 
-        ScrollPane scrollPane = new ScrollPane(vbox);
-        scrollPane.setMinWidth(scene.getWidth() / 10);
-        scrollPane.setMaxHeight(scene.getHeight() / 5);
+        for (String location : locations) {
+            RadioButton radioButton = new RadioButton(location);
+            vBoxLocations.getChildren().add(radioButton);
+            radioButtonLocation.add(radioButton);
+            radioButton.setToggleGroup(toggleGroup);
+        }
+        radioButtonLocation.get(0).setSelected(true);
 
+        ScrollPane scrollPaneCuisines = new ScrollPane(vboxCuisines);
+        scrollPaneCuisines.setMinWidth(scene.getWidth() / 10);
+        scrollPaneCuisines.setMaxHeight(scene.getHeight() / 5);
+        Label cuisineLabel = new Label("Cuisine:");
+        cuisineLabel.setTextFill(Color.WHITE);
+        cuisineLabel.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, scene.getWidth() / 50));
+        wrapCuisines.getChildren().add(cuisineLabel);
+        wrapCuisines.getChildren().add(scrollPaneCuisines);
+
+        ScrollPane scrollPaneLocations = new ScrollPane(vBoxLocations);
+        Label locationLabel = new Label("Location:");
+        locationLabel.setTextFill(Color.WHITE);
+        locationLabel.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, scene.getWidth() / 50)); //Groesse sollte dem Fenster angepasst sein
+        scrollPaneLocations.setMinWidth(scene.getWidth() / 8);
+        scrollPaneLocations.setMaxHeight(scene.getHeight() / 5);
+        wrapLocations.getChildren().add(locationLabel);
+        wrapLocations.getChildren().add(scrollPaneLocations);
 
         Label label = new Label("Restaurandom");
         label.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, scene.getWidth() / 20)); //Groesse sollte dem Fenster angepasst sein
@@ -69,8 +101,9 @@ public class Fx extends Application {
         hBox.setPadding(new Insets(20, 0, 0, 0));
 
 
+        hBox2.getChildren().add(wrapLocations);
         hBox2.getChildren().add(btn1);
-        hBox2.getChildren().add(scrollPane);
+        hBox2.getChildren().add(wrapCuisines);
         hBox2.setAlignment(Pos.CENTER);
 
         root.setTop(hBox);
@@ -87,14 +120,29 @@ public class Fx extends Application {
             @Override
             public void handle(ActionEvent actionEvent) {
                 List<String> desiredCuisines = new ArrayList<>();
+                String location = "";
 
-                for (CheckBox checkBox : checkBoxes) {
+                for (CheckBox checkBox : checkBoxesCuisines) {
                     if (checkBox.isSelected()) {
                         desiredCuisines.add(checkBox.getText());
                     }
                 }
 
+                for (RadioButton radioButton : radioButtonLocation) {
+                    if(radioButton.isSelected()) {
+                        location = radioButton.getText();
+                    }
+                }
+
+                System.out.println("Sending to Google API");
+                GoogleAPIRequest.googleAPIRequest(desiredCuisines, location, array);
+
+
                 Restaurant restaurant = Main.chooseOne(Main.readRestaurants(), desiredCuisines);
+                String photoReference = restaurant.getPhotoReference();
+                if(photoReference != null) {
+                    PhotoRequest.requestPhoto(photoReference);
+                }
                 Label randomRestaurant = new Label();
 
                 if (!restaurant.getName().equals("noRestaurant")) {
@@ -127,24 +175,29 @@ public class Fx extends Application {
                 root.setBottom(hBox2);
                 root.setTop(hBoxImage);
 
-//                Task<Image> loadImageTask = new Task<>() {
-//                    @Override
-//                    protected Image call() {
-//                        return new Image(restaurant.getImage_url());
-//                    }
-//                };
+
+                    Task<Image> loadImageTask = new Task<>() {
+                        @Override
+                        protected Image call() {
+                            if(photoReference != null) {
+                                return new Image("file:photo.jpg");
+                            } else {
+                                return new Image("file:noPhoto.jpg");
+                            }
+                        }
+                    };
 
 
-//                loadImageTask.setOnSucceeded(event -> {imageView.setImage(loadImageTask.getValue());
-//                    imageView.setPreserveRatio(true);
-//                    imageView.setFitHeight(scene.getHeight() * 0.3);
-//                    hBoxImage.getChildren().clear();
-//                    hBoxImage.getChildren().add(imageView);
-//                    hBoxImage.setAlignment(Pos.CENTER);
-//                    root.setTop(hBoxImage);
-//                });
-//
-//                new Thread(loadImageTask).start();
+                loadImageTask.setOnSucceeded(event -> {imageView.setImage(loadImageTask.getValue());
+                    imageView.setPreserveRatio(true);
+                    imageView.setFitHeight(scene.getHeight() * 0.3);
+                    hBoxImage.getChildren().clear();
+                    hBoxImage.getChildren().add(imageView);
+                    hBoxImage.setAlignment(Pos.CENTER);
+                    root.setTop(hBoxImage);
+                });
+
+                new Thread(loadImageTask).start();
 
 
                 primaryStage.show();
