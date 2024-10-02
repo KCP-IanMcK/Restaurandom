@@ -13,11 +13,10 @@ import org.json.JSONObject;
 
 public class GoogleAPIRequest {
 
-    public static List<JSONObject> restaurantList;
 
     public static void googleAPIRequest(List<String> desiredCuisines, String locationString, String[] allCuisines) {
         String apiKey = "AIzaSyBOklWQxqMKLHvS_slwXrMGpC9RPgI01cc";
-        String location = LocationGetter.getGeoLocation();  //LocationGetter.getLocation(locationString);
+        String location = locationString;  //LocationGetter.getLocation(locationString);
         int radius = 200;
         String finalDesiredCuisines = "";
         if(desiredCuisines.toString().equals("[Select all]")) {

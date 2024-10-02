@@ -29,7 +29,7 @@ public class Fx extends Application {
         List<String> cuisines = new ArrayList<>();
         String[] array = {"Chinese", "Italian", "Fastfood", "Indian"}; //Cuisines dürfen keine Abstände haben, sonst funktioniert API nicht
         Collections.addAll(cuisines, array);
-        String[] locations = {"Oerlikon", "Zürich Zentrum", "Bülach", "Embrach", "Winterthur", "Oberglatt", "Eglisau", "Rümlang"};
+        String location = LocationGetter.getGeoLocation();
 
 
         BorderPane root = new BorderPane();
@@ -40,8 +40,6 @@ public class Fx extends Application {
         HBox hBox2 = new HBox(scene.getWidth() / 50);
         HBox hBoxImage = new HBox();
         List<CheckBox> checkBoxesCuisines = new ArrayList<>();
-        List<RadioButton> radioButtonLocation = new ArrayList<>();
-        ToggleGroup toggleGroup = new ToggleGroup(); //Für RadioButtons
         btn1.setStyle("-fx-background-color:#B0BEC5; -fx-font-weight:bold; -fx-border-radius: 3px; -fx-font-size: 18px");
 
 
@@ -70,32 +68,6 @@ public class Fx extends Application {
         wrapCuisines.getChildren().add(cuisineLabel);
         wrapCuisines.getChildren().add(scrollPaneCuisines);
 
-        //Locations Component ----------------------------------------------------
-//        VBox wrapLocations = new VBox();
-//        wrapLocations.setAlignment(Pos.CENTER);
-//        VBox vBoxLocations = new VBox();
-//
-//        for (String location : locations) {
-//            RadioButton radioButton = new RadioButton(location);
-//            vBoxLocations.getChildren().add(radioButton);
-//            radioButtonLocation.add(radioButton);
-//            radioButton.setToggleGroup(toggleGroup);
-//        }
-//        radioButtonLocation.getFirst().setSelected(true);
-//        radioButtonLocation.getFirst().setTextFill(Color.WHITE);
-//        radioButtonLocation.getFirst().setStyle("-fx-background-color: #7B1FA2");
-//
-//
-//        ScrollPane scrollPaneLocations = new ScrollPane(vBoxLocations);
-//        scrollPaneLocations.setStyle("-fx-background-color: #FFFFFF");
-//        Label locationLabel = new Label("Location:");
-//        locationLabel.setTextFill(Color.WHITE);
-//        locationLabel.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, scene.getWidth() / 50)); //Groesse sollte dem Fenster angepasst sein
-//        scrollPaneLocations.setMinWidth(scene.getWidth() / 8);
-//        scrollPaneLocations.setMaxHeight(scene.getHeight() / 5);
-//        wrapLocations.getChildren().add(locationLabel);
-//        wrapLocations.getChildren().add(scrollPaneLocations);
-
 
         //Titel --------------------------------------------------------------------
         Label label = new Label("Restaurandom");
@@ -106,7 +78,6 @@ public class Fx extends Application {
         hBox.setPadding(new Insets(20, 0, 0, 0));
 
         //Adding all middle Components ----------------------------------------------
-//        hBox2.getChildren().add(wrapLocations);
         hBox2.getChildren().add(btn1);
         hBox2.getChildren().add(wrapCuisines);
         hBox2.setAlignment(Pos.CENTER);
@@ -126,20 +97,12 @@ public class Fx extends Application {
             @Override
             public void handle(ActionEvent actionEvent) {
                 List<String> desiredCuisines = new ArrayList<>();
-                String location = "";
 
                 for (CheckBox checkBox : checkBoxesCuisines) {
                     if (checkBox.isSelected()) {
                         desiredCuisines.add(checkBox.getText());
                     }
                 }
-
-//                for (RadioButton radioButton : radioButtonLocation) {
-//                    if(radioButton.isSelected()) {
-//                        location = radioButton.getText();
-//                    }
-//                }
-                location = LocationGetter.getGeoLocation();
 
                 if(Main.firstTime) { //Muss nur das erste mal eine Request senden, nachher kannn es das Json auslesen
                     GoogleAPIRequest.googleAPIRequest(desiredCuisines, location, array);
@@ -224,7 +187,7 @@ public class Fx extends Application {
             }
         });
 
-        //Button Styling---------------------------------------------------------------------------
+        //Button und Checkbox Styling---------------------------------------------------------------------------
         btn1.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -243,24 +206,6 @@ public class Fx extends Application {
                 btn1.setStyle("-fx-background-color:#7B1FA2; -fx-font-weight:bold; -fx-border-radius: 3px; -fx-text-fill: #FFFFFF; -fx-font-size: 18px");
             }
         });
-
-//        for (RadioButton radioButton : radioButtonLocation) {
-//            radioButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
-//                @Override
-//                public void handle(MouseEvent event) {
-//                    for (RadioButton radioButton : radioButtonLocation) {
-//                        radioButton.setTextFill(Color.BLACK);
-//                        radioButton.setStyle("-fx-background-color: #FFFFFF");
-//                    }
-//                    for (RadioButton radioButton : radioButtonLocation) {
-//                        if(radioButton.isSelected()) {
-//                            radioButton.setTextFill(Color.WHITE);
-//                            radioButton.setStyle("-fx-background-color: #7B1FA2");
-//                        }
-//                    }
-//                }
-//            });
-//        }
 
         checkBox1.setTextFill(Color.WHITE);
         checkBox1.setStyle("-fx-background-color: #7B1FA2");
