@@ -71,9 +71,6 @@ public class Fx extends Application {
 
 
         //Titel --------------------------------------------------------------------
-//        Label label = new Label("Restaurandom");
-//        label.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, scene.getWidth() / 20)); //Groesse sollte dem Fenster angepasst sein
-//        label.setTextFill(Color.web("#FFFFFF")); //White
         File file = new File("src/main/resources/RestaurandomLogo.png");
         Image logo = new Image(file.toURI().toString());
         ImageView imageViewLogo = new ImageView(logo);

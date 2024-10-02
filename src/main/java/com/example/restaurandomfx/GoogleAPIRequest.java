@@ -16,7 +16,7 @@ public class GoogleAPIRequest {
 
     public static void googleAPIRequest(List<String> desiredCuisines, String locationString, String[] allCuisines) {
         String apiKey = "AIzaSyBOklWQxqMKLHvS_slwXrMGpC9RPgI01cc";
-        String location = locationString;  //LocationGetter.getLocation(locationString);
+        String location = locationString;
         int radius = 200;
         String finalDesiredCuisines = "";
         if(desiredCuisines.toString().equals("[Select all]")) {
@@ -26,7 +26,7 @@ public class GoogleAPIRequest {
         for (String desiredCuisine : desiredCuisines) {
             finalDesiredCuisines += desiredCuisine;
         }
-        String keyword = finalDesiredCuisines; // schauen, obs funktioniert
+        String keyword = finalDesiredCuisines;
         System.out.println("Desired cuisines: " + desiredCuisines);
         try {
             String urlString = String.format(
