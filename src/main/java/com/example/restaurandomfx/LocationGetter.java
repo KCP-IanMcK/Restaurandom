@@ -81,7 +81,6 @@ public class LocationGetter {
         JSONObject jsonObject = new JSONObject(response);
         double lat = jsonObject.getDouble("latitude"); //lat
         double lon = jsonObject.getDouble("longitude"); //lon
-        System.out.println(lat + "," + lon);
 
         return lat + "," + lon;
     }

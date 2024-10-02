@@ -20,7 +20,7 @@ public class PhotoRequest {
             conn.setRequestMethod("GET");
 
             InputStream in = conn.getInputStream();
-            FileOutputStream out = new FileOutputStream("photo.jpg");
+            FileOutputStream out = new FileOutputStream("src/main/resources/photo.jpg");
 
             byte[] buffer = new byte[1024];
             int bytesRead;

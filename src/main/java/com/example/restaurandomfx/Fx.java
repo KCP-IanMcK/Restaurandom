@@ -19,6 +19,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -70,10 +71,15 @@ public class Fx extends Application {
 
 
         //Titel --------------------------------------------------------------------
-        Label label = new Label("Restaurandom");
-        label.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, scene.getWidth() / 20)); //Groesse sollte dem Fenster angepasst sein
-        label.setTextFill(Color.web("#FFFFFF")); //White
-        hBox.getChildren().add(label);
+//        Label label = new Label("Restaurandom");
+//        label.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, scene.getWidth() / 20)); //Groesse sollte dem Fenster angepasst sein
+//        label.setTextFill(Color.web("#FFFFFF")); //White
+        File file = new File("src/main/resources/RestaurandomLogo.png");
+        Image logo = new Image(file.toURI().toString());
+        ImageView imageViewLogo = new ImageView(logo);
+        imageViewLogo.setPreserveRatio(true);
+        imageViewLogo.setFitWidth(scene.getWidth());
+        hBox.getChildren().add(imageViewLogo); //label
         hBox.setAlignment(Pos.CENTER);
         hBox.setPadding(new Insets(20, 0, 0, 0));
 
@@ -151,9 +157,9 @@ public class Fx extends Application {
                         @Override
                         protected Image call() {
                             if(photoReference != null) {
-                                return new Image("file:photo.jpg");
+                                return new Image("file:src/main/resources/photo.jpg");
                             } else {
-                                return new Image("file:noPhoto.jpg");
+                                return new Image("file:src/main/resources/noPhoto.jpg");
                             }
                         }
                     };
