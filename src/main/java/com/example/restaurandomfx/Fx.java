@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -26,7 +27,7 @@ public class Fx extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         List<String> cuisines = new ArrayList<>();
-        String[] array = {"Chinese", "Italian", "Fast Food", "Indian"};
+        String[] array = {"Chinese", "Italian", "Fastfood", "Indian"}; //Cuisines dürfen keine Abstände haben, sonst funktioniert API nicht
         Collections.addAll(cuisines, array);
         String[] locations = {"Oerlikon", "Zürich Zentrum", "Bülach", "Embrach", "Winterthur", "Oberglatt", "Eglisau", "Rümlang"};
 
@@ -41,6 +42,8 @@ public class Fx extends Application {
         List<CheckBox> checkBoxesCuisines = new ArrayList<>();
         List<RadioButton> radioButtonLocation = new ArrayList<>();
         ToggleGroup toggleGroup = new ToggleGroup(); //Für RadioButtons
+        btn1.setStyle("-fx-background-color:#B0BEC5; -fx-font-weight:bold; -fx-border-radius: 3px; -fx-font-size: 18px");
+
 
         //Cuisine Component ----------------------------------------------------
         VBox wrapCuisines = new VBox();
@@ -56,6 +59,7 @@ public class Fx extends Application {
             vboxCuisines.getChildren().add(checkBox);
             checkBoxesCuisines.add(checkBox);
         }
+        checkBoxesCuisines.getFirst().setSelected(true);
 
         ScrollPane scrollPaneCuisines = new ScrollPane(vboxCuisines);
         scrollPaneCuisines.setMinWidth(scene.getWidth() / 10);
@@ -78,8 +82,12 @@ public class Fx extends Application {
             radioButton.setToggleGroup(toggleGroup);
         }
         radioButtonLocation.getFirst().setSelected(true);
+        radioButtonLocation.getFirst().setTextFill(Color.WHITE);
+        radioButtonLocation.getFirst().setStyle("-fx-background-color: #7B1FA2");
+
 
         ScrollPane scrollPaneLocations = new ScrollPane(vBoxLocations);
+        scrollPaneLocations.setStyle("-fx-background-color: #FFFFFF");
         Label locationLabel = new Label("Location:");
         locationLabel.setTextFill(Color.WHITE);
         locationLabel.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, scene.getWidth() / 50)); //Groesse sollte dem Fenster angepasst sein
@@ -119,7 +127,6 @@ public class Fx extends Application {
             public void handle(ActionEvent actionEvent) {
                 List<String> desiredCuisines = new ArrayList<>();
                 String location = "";
-
 
                 for (CheckBox checkBox : checkBoxesCuisines) {
                     if (checkBox.isSelected()) {
@@ -215,5 +222,63 @@ public class Fx extends Application {
                 }
             }
         });
+
+        //Button Styling---------------------------------------------------------------------------
+        btn1.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                btn1.setStyle("-fx-background-color:#7B1FA2; -fx-font-weight:bold; -fx-border-radius: 3px; -fx-text-fill: #FFFFFF; -fx-font-size: 18px");
+            }
+        });
+        btn1.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                btn1.setStyle("-fx-background-color:#B0BEC5; -fx-font-weight:bold; -fx-border-radius: 3px; -fx-font-size: 18px");
+            }
+        });
+        btn1.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                btn1.setStyle("-fx-background-color:#7B1FA2; -fx-font-weight:bold; -fx-border-radius: 3px; -fx-text-fill: #FFFFFF; -fx-font-size: 18px");
+            }
+        });
+
+        for (RadioButton radioButton : radioButtonLocation) {
+            radioButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    for (RadioButton radioButton : radioButtonLocation) {
+                        radioButton.setTextFill(Color.BLACK);
+                        radioButton.setStyle("-fx-background-color: #FFFFFF");
+                    }
+                    for (RadioButton radioButton : radioButtonLocation) {
+                        if(radioButton.isSelected()) {
+                            radioButton.setTextFill(Color.WHITE);
+                            radioButton.setStyle("-fx-background-color: #7B1FA2");
+                        }
+                    }
+                }
+            });
+        }
+
+        checkBox1.setTextFill(Color.WHITE);
+        checkBox1.setStyle("-fx-background-color: #7B1FA2");
+
+        for (CheckBox checkBoxesCuisine : checkBoxesCuisines) {
+            checkBoxesCuisine.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    for (CheckBox boxesCuisine : checkBoxesCuisines) {
+                        if(boxesCuisine.isSelected()){
+                            boxesCuisine.setTextFill(Color.WHITE);
+                            boxesCuisine.setStyle("-fx-background-color: #7B1FA2");
+                        } else {
+                            boxesCuisine.setTextFill(Color.BLACK);
+                            boxesCuisine.setStyle("-fx-background-color: #FFFFFF");
+                        }
+                    }
+                }
+            });
+        }
     }
 }
