@@ -17,7 +17,7 @@ public class GoogleAPIRequest {
 
     public static void googleAPIRequest(List<String> desiredCuisines, String locationString, String[] allCuisines) {
         String apiKey = "AIzaSyBOklWQxqMKLHvS_slwXrMGpC9RPgI01cc";
-        String location = LocationGetter.getLocation(locationString); //geoLocation einfügen?
+        String location = LocationGetter.getGeoLocation();  //LocationGetter.getLocation(locationString);
         int radius = 200;
         String finalDesiredCuisines = "";
         if(desiredCuisines.toString().equals("[Select all]")) {

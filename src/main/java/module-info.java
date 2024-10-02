@@ -3,6 +3,7 @@ module com.example.restaurandomfx {
     requires javafx.fxml;
     requires com.google.gson;
     requires org.json;
+    requires google.maps.services;
 
 
     opens com.example.restaurandomfx to javafx.fxml;
