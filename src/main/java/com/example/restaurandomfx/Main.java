@@ -34,11 +34,7 @@ public class Main extends Fx {
 
     public static Restaurant chooseOne(Restaurant[] restaurants, List<String> desiredCuisines) {
         if (firstTime) {
-            if (desiredCuisines.getFirst().equals("Select all")) {
-                availableOptions.addAll(Arrays.asList(restaurants));
-            } else {
-                Collections.addAll(availableOptions, restaurants);
-            }
+            availableOptions.addAll(Arrays.asList(restaurants));
             firstTime = false;
         }
 
