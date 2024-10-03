@@ -41,6 +41,9 @@ public class Fx extends Application {
         HBox hBox2 = new HBox(scene.getWidth() / 50);
         HBox hBoxImage = new HBox();
         List<CheckBox> checkBoxesCuisines = new ArrayList<>();
+        List<RadioButton> radioButtonsLocations = new ArrayList<>();
+        ToggleGroup toggleGroup = new ToggleGroup();
+        TextField textField = new TextField();
         btn1.setStyle("-fx-background-color:#B0BEC5; -fx-font-weight:bold; -fx-border-radius: 3px; -fx-font-size: 18px");
 
 
@@ -69,6 +72,34 @@ public class Fx extends Application {
         wrapCuisines.getChildren().add(cuisineLabel);
         wrapCuisines.getChildren().add(scrollPaneCuisines);
 
+        //Location Component ----------------------------------------------------
+        VBox wrapLocations = new VBox();
+        wrapCuisines.setAlignment(Pos.CENTER);
+        VBox vboxLocations = new VBox();
+
+
+        RadioButton rBAuto = new RadioButton("Auto");
+        RadioButton rBManual = new RadioButton("Manual");
+        vboxLocations.getChildren().add(rBAuto);
+        vboxLocations.getChildren().add(rBManual);
+        radioButtonsLocations.add(rBAuto);
+        radioButtonsLocations.add(rBManual);
+        rBAuto.setToggleGroup(toggleGroup);
+        rBManual.setToggleGroup(toggleGroup);
+
+        radioButtonsLocations.getFirst().setSelected(true);
+        radioButtonsLocations.getFirst().setStyle("-fx-background-color: #7B1FA2; -fx-text-fill: #FFFFFF");
+
+        ScrollPane scrollPaneLocations = new ScrollPane(vboxLocations);
+        scrollPaneLocations.setMinWidth(scene.getWidth() / 10);
+        scrollPaneLocations.setMaxHeight(scene.getHeight() / 5);
+        Label locationLabel = new Label("Find coordinates:");
+        locationLabel.setTextFill(Color.WHITE);
+        locationLabel.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, scene.getWidth() / 50));
+        wrapLocations.getChildren().add(locationLabel);
+        wrapLocations.getChildren().add(scrollPaneLocations);
+        wrapLocations.setAlignment(Pos.CENTER);
+
 
         //Titel --------------------------------------------------------------------
         File file = new File("src/main/resources/RestaurandomLogo.png");
@@ -81,6 +112,7 @@ public class Fx extends Application {
         hBox.setPadding(new Insets(20, 0, 0, 0));
 
         //Adding all middle Components ----------------------------------------------
+        hBox2.getChildren().add(wrapLocations);
         hBox2.getChildren().add(btn1);
         hBox2.getChildren().add(wrapCuisines);
         hBox2.setAlignment(Pos.CENTER);
@@ -107,8 +139,12 @@ public class Fx extends Application {
                     }
                 }
 
-                if(Main.firstTime) { //Muss nur das erste mal eine Request senden, nachher kannn es das Json auslesen
+                if(Main.firstTime && rBAuto.isSelected()) { //Muss nur das erste mal eine Request senden, nachher kannn es das Json auslesen
                     GoogleAPIRequest.googleAPIRequest(desiredCuisines, location, array);
+                } else if (Main.firstTime && rBManual.isSelected()) {
+                    String manualLocation = textField.getText();
+                    manualLocation = manualLocation.replace(" ", "");
+                    GoogleAPIRequest.googleAPIRequest(desiredCuisines, manualLocation, array);
                 }
 
                 Restaurant restaurant = Main.chooseOne(Main.readRestaurants(), desiredCuisines);
@@ -209,6 +245,35 @@ public class Fx extends Application {
                 btn1.setStyle("-fx-background-color:#7B1FA2; -fx-font-weight:bold; -fx-border-radius: 3px; -fx-text-fill: #FFFFFF; -fx-font-size: 18px");
             }
         });
+
+        for (RadioButton radioButton : radioButtonsLocations) {
+            radioButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    for (RadioButton radioButton : radioButtonsLocations) {
+                        radioButton.setTextFill(Color.BLACK);
+                        radioButton.setStyle("-fx-background-color: #FFFFFF");
+                    }
+                    for (RadioButton radioButton : radioButtonsLocations) {
+                        if(radioButton.isSelected()) {
+                            radioButton.setTextFill(Color.WHITE);
+                            radioButton.setStyle("-fx-background-color: #7B1FA2");
+                        }
+                    }
+                    textField.setPromptText("Latitude, Longitude");
+                    if(radioButton.equals(rBManual)){
+                        try {
+                            wrapLocations.getChildren().add(textField);
+                        } catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                    if (radioButton.equals(rBAuto)){
+                        wrapLocations.getChildren().removeLast();
+                    }
+                }
+            });
+        }
 
         checkBox1.setTextFill(Color.WHITE);
         checkBox1.setStyle("-fx-background-color: #7B1FA2");
