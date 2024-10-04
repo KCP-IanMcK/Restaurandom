@@ -167,19 +167,18 @@ public class Fx extends Application {
                     }
                 }
 
+                for (RadioButton radioButton : radioButtonsPricing) {
+                    if (radioButton.isSelected()) {
+                        priceLevel = radioButton.getText();
+                    }
+                }
+
                 if(Main.firstTime && rBAuto.isSelected()) { //Muss nur das erste mal eine Request senden, nachher kannn es das Json auslesen
                     GoogleAPIRequest.googleAPIRequest(desiredCuisines, location, array, priceLevel);
                 } else if (Main.firstTime && rBManual.isSelected()) {
                     String manualLocation = textField.getText();
                     manualLocation = manualLocation.replace(" ", "");
                     GoogleAPIRequest.googleAPIRequest(desiredCuisines, manualLocation, array, priceLevel);
-                for (RadioButton radioButton : radioButtonsPricing) {
-                    if (radioButton.isSelected()) {
-                        priceLevel = radioButton.getText();
-                    }
-                }
-                if(Main.firstTime) { //Muss nur das erste mal eine Request senden, nachher kann es das Json auslesen
-                    GoogleAPIRequest.googleAPIRequest(desiredCuisines, location, array, priceLevel);
                 }
 
                 Restaurant restaurant = Main.chooseOne(Main.readRestaurants(), desiredCuisines);
@@ -247,7 +246,7 @@ public class Fx extends Application {
 
                 primaryStage.show();
             }
-        }});
+        });
 
         resetBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
