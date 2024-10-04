@@ -19,13 +19,14 @@ public class GoogleAPIRequest {
         String location = locationString;
         String maxprice = "";
         String finalDesiredCuisines = "";
-        if(desiredCuisines.toString().equals("[Select all]")) {
+        if(desiredCuisines.toString().equals("[Select all ]")) {
             finalDesiredCuisines = "Restaurant";
         } else {
             for (String desiredCuisine : desiredCuisines) {
                 finalDesiredCuisines += desiredCuisine;
             }
         }
+        finalDesiredCuisines = finalDesiredCuisines.replace(" ","");
         String keyword = finalDesiredCuisines;
         System.out.println("Desired cuisines: " + desiredCuisines);
 

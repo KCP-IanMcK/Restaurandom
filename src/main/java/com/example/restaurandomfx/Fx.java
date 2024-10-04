@@ -15,6 +15,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -30,7 +31,7 @@ public class Fx extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         List<String> cuisines = new ArrayList<>();
-        String[] array = {"Swiss", "Chinese", "Italian", "Fastfood", "Indian", "Vietnamese", "Thai", "Mexican", "Turkish", "Mediterranean", "Tibetan"}; //Cuisines dürfen keine Abstände haben, sonst funktioniert API nicht
+        String[] array = {"Swiss ", "Chinese ", "Italian ", "Fastfood ", "Indian ", "Vietnamese ", "Thai ", "Mexican ", "Turkish ", "Mediterranean ", "Tibetan "}; //Cuisines dürfen keine Abstände haben, sonst funktioniert API nicht
         Collections.addAll(cuisines, array);
         String location = LocationGetter.getGeoLocation();
 
@@ -53,13 +54,15 @@ public class Fx extends Application {
         VBox wrapCuisines = new VBox();
         wrapCuisines.setAlignment(Pos.CENTER);
         VBox vboxCuisines = new VBox();
-        CheckBox checkBox1 = new CheckBox("Select all");
+        CheckBox checkBox1 = new CheckBox("Select all ");
+        checkBox1.setStyle("-fx-background-radius: 3px");
         vboxCuisines.getChildren().add(checkBox1);
 
         checkBoxesCuisines.add(checkBox1);
 
         for (String cuisine : cuisines) {
             CheckBox checkBox = new CheckBox(cuisine);
+            checkBox.setStyle("-fx-background-radius: 3px");
             vboxCuisines.getChildren().add(checkBox);
             checkBoxesCuisines.add(checkBox);
         }
@@ -68,6 +71,7 @@ public class Fx extends Application {
         ScrollPane scrollPaneCuisines = new ScrollPane(vboxCuisines);
         scrollPaneCuisines.setMinWidth(scene.getWidth() / 10);
         scrollPaneCuisines.setMaxHeight(scene.getHeight() / 5);
+        scrollPaneCuisines.setStyle("-fx-background-radius: 3px");
         Label cuisineLabel = new Label("Cuisine:");
         cuisineLabel.setTextFill(Color.WHITE);
         cuisineLabel.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, scene.getWidth() / 50));
@@ -80,8 +84,10 @@ public class Fx extends Application {
         VBox vboxLocations = new VBox();
 
 
-        RadioButton rBAuto = new RadioButton("Auto");
-        RadioButton rBManual = new RadioButton("Manual");
+        RadioButton rBAuto = new RadioButton("Auto ");
+        RadioButton rBManual = new RadioButton("Manual ");
+        rBAuto.setStyle("-fx-background-radius: 3px");
+        rBManual.setStyle("-fx-background-radius: 3px");
         vboxLocations.getChildren().add(rBAuto);
         vboxLocations.getChildren().add(rBManual);
         radioButtonsLocations.add(rBAuto);
@@ -90,16 +96,18 @@ public class Fx extends Application {
         rBManual.setToggleGroup(toggleGroup);
 
         radioButtonsLocations.getFirst().setSelected(true);
-        radioButtonsLocations.getFirst().setStyle("-fx-background-color: #7B1FA2; -fx-text-fill: #FFFFFF");
+        radioButtonsLocations.getFirst().setStyle("-fx-background-color: #7B1FA2; -fx-text-fill: #FFFFFF; -fx-background-radius: 3px");
 
-        ScrollPane scrollPaneLocations = new ScrollPane(vboxLocations);
-        scrollPaneLocations.setMinWidth(scene.getWidth() / 10);
-        scrollPaneLocations.setMaxHeight(scene.getHeight() / 5);
+        Pane paneLocations = new Pane(vboxLocations);
+        paneLocations.setMinWidth(scene.getWidth() / 10);
+        paneLocations.setMaxHeight(scene.getHeight() / 5);
+
         Label locationLabel = new Label("Find coordinates:");
         locationLabel.setTextFill(Color.WHITE);
         locationLabel.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, scene.getWidth() / 50));
+        paneLocations.setStyle("-fx-background-color: #F4F4F4; -fx-background-radius: 3px; -fx-background-insets: -1px");
         wrapLocations.getChildren().add(locationLabel);
-        wrapLocations.getChildren().add(scrollPaneLocations);
+        wrapLocations.getChildren().add(paneLocations);
         wrapLocations.setAlignment(Pos.CENTER);
 
         //Pricing Component ----------------------------------------------------
@@ -110,19 +118,20 @@ public class Fx extends Application {
         List<RadioButton> radioButtonsPricing = new ArrayList<>();
 
         for (int i = 1; i < 5; i++) {
-            RadioButton radioButton = new RadioButton(String.valueOf(i));
+            RadioButton radioButton = new RadioButton(i + " ");
+            radioButton.setStyle("-fx-background-radius: 3px");
             vboxPricing.getChildren().add(radioButton);
             toggleGroupPricing.getToggles().add(radioButton);
             radioButtonsPricing.add(radioButton);
         }
         toggleGroupPricing.getToggles().getLast().setSelected(true);
-        radioButtonsPricing.getFirst().setText("1 (cheap)");
-        radioButtonsPricing.getLast().setText("4 (expensive)");
+        radioButtonsPricing.getFirst().setText("1 (cheap) ");
+        radioButtonsPricing.getLast().setText("4 (expensive) ");
 
         ScrollPane scrollPanePricing = new ScrollPane(vboxPricing);
         scrollPanePricing.setMinWidth(scene.getWidth() / 10);
         scrollPanePricing.setMaxHeight(scene.getHeight() / 5);
-        scrollPanePricing.setStyle("-fx-background-color:#FFFFFF;");
+        scrollPanePricing.setStyle("-fx-background-color:#F4F4F4; -fx-background-radius: 3px");
         Label pricingLabel = new Label("Max Pricing:");
         pricingLabel.setTextFill(Color.WHITE);
         pricingLabel.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, scene.getWidth() / 50));
@@ -152,11 +161,19 @@ public class Fx extends Application {
         hBox.setPadding(new Insets(20, 0, 0, 0));
 
         //Adding all middle Components ----------------------------------------------
-        hBox2.getChildren().add(wrapRadius);
-        hBox2.getChildren().add(wrapLocations);
+        VBox wrapLeft =new VBox();
+        VBox wrapRight =new VBox();
+        wrapLeft.setAlignment(Pos.CENTER);
+        wrapRight.setAlignment(Pos.CENTER);
+        wrapLeft.setSpacing(10);
+        wrapRight.setSpacing(10);
+        wrapLeft.getChildren().add(wrapCuisines);
+        wrapLeft.getChildren().add(wrapRadius);
+        wrapRight.getChildren().add(wrapPricing);
+        wrapRight.getChildren().add(wrapLocations);
+        hBox2.getChildren().add(wrapLeft);
         hBox2.getChildren().add(btn1);
-        hBox2.getChildren().add(wrapCuisines);
-        hBox2.getChildren().add(wrapPricing);
+        hBox2.getChildren().add(wrapRight);
         hBox2.setAlignment(Pos.CENTER);
 
         root.setTop(hBox);
@@ -193,6 +210,7 @@ public class Fx extends Application {
                         priceLevel = radioButton.getText();
                     }
                 }
+                priceLevel = priceLevel.replace(" ", "");
 
                 if (!radiusTextField.getText().isEmpty()){
                     radius = radiusTextField.getText();
@@ -320,12 +338,12 @@ public class Fx extends Application {
                 public void handle(MouseEvent event) {
                     for (RadioButton radioButton : radioButtonsLocations) {
                         radioButton.setTextFill(Color.BLACK);
-                        radioButton.setStyle("-fx-background-color: #FFFFFF");
+                        radioButton.setStyle("-fx-background-color: #F4F4F4; -fx-background-radius: 3px");
                     }
                     for (RadioButton radioButton : radioButtonsLocations) {
                         if(radioButton.isSelected()) {
                             radioButton.setTextFill(Color.WHITE);
-                            radioButton.setStyle("-fx-background-color: #7B1FA2");
+                            radioButton.setStyle("-fx-background-color: #7B1FA2; -fx-background-radius: 3px");
                         }
                     }
                     textField.setPromptText("Latitude, Longitude");
@@ -344,7 +362,7 @@ public class Fx extends Application {
         }
 
         checkBox1.setTextFill(Color.WHITE);
-        checkBox1.setStyle("-fx-background-color: #7B1FA2");
+        checkBox1.setStyle("-fx-background-color: #7B1FA2; -fx-background-radius: 3px");
 
         for (CheckBox checkBoxesCuisine : checkBoxesCuisines) {
             checkBoxesCuisine.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -353,17 +371,17 @@ public class Fx extends Application {
                     for (CheckBox boxesCuisine : checkBoxesCuisines) {
                         if(boxesCuisine.isSelected()){
                             boxesCuisine.setTextFill(Color.WHITE);
-                            boxesCuisine.setStyle("-fx-background-color: #7B1FA2");
+                            boxesCuisine.setStyle("-fx-background-color: #7B1FA2; -fx-background-radius: 3px");
                         } else {
                             boxesCuisine.setTextFill(Color.BLACK);
-                            boxesCuisine.setStyle("-fx-background-color: #FFFFFF");
+                            boxesCuisine.setStyle("-fx-background-color: #F4F4F4; -fx-background-radius: 3px");
                         }
                     }
                 }
             });
         }
         radioButtonsPricing.getLast().setTextFill(Color.WHITE);
-        radioButtonsPricing.getLast().setStyle("-fx-background-color: #7B1FA2");
+        radioButtonsPricing.getLast().setStyle("-fx-background-color: #7B1FA2; -fx-background-radius: 3px");
 
         for (RadioButton radioButton : radioButtonsPricing) {
             radioButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -372,10 +390,10 @@ public class Fx extends Application {
                     for (RadioButton radioButton1 : radioButtonsPricing) {
                         if(radioButton1.isSelected()){
                             radioButton1.setTextFill(Color.WHITE);
-                            radioButton1.setStyle("-fx-background-color: #7B1FA2");
+                            radioButton1.setStyle("-fx-background-color: #7B1FA2; -fx-background-radius: 3px");
                         } else {
                             radioButton1.setTextFill(Color.BLACK);
-                            radioButton1.setStyle("-fx-background-color: #FFFFFF");
+                            radioButton1.setStyle("-fx-background-color: #F4F4F4; -fx-background-radius: 3px");
                         }
                     }
                 }
