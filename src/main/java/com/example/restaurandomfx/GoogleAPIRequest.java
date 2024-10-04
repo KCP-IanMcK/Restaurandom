@@ -18,14 +18,14 @@ public class GoogleAPIRequest {
         String apiKey = "AIzaSyBOklWQxqMKLHvS_slwXrMGpC9RPgI01cc";
         String location = locationString;
         String maxprice = "";
-        int radius = 20000;
+        int radius = 2000;
         String finalDesiredCuisines = "";
         if(desiredCuisines.toString().equals("[Select all]")) {
-            desiredCuisines.addAll(List.of(allCuisines));
-            desiredCuisines.remove("Select all");
-        }
-        for (String desiredCuisine : desiredCuisines) {
-            finalDesiredCuisines += desiredCuisine;
+            finalDesiredCuisines = "Restaurant";
+        } else {
+            for (String desiredCuisine : desiredCuisines) {
+                finalDesiredCuisines += desiredCuisine;
+            }
         }
         String keyword = finalDesiredCuisines;
         System.out.println("Desired cuisines: " + desiredCuisines);

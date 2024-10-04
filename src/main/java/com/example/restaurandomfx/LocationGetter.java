@@ -27,6 +27,7 @@ public class LocationGetter {
                 }
                 in.close();
                 response = content.toString();
+                System.out.println(response);
             }
         } catch (Exception e) {
             e.printStackTrace();
