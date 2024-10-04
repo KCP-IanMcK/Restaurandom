@@ -10,6 +10,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -28,7 +30,7 @@ public class Fx extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         List<String> cuisines = new ArrayList<>();
-        String[] array = {"Chinese", "Italian", "Fastfood", "Indian"}; //Cuisines dürfen keine Abstände haben, sonst funktioniert API nicht
+        String[] array = {"Swiss", "Chinese", "Italian", "Fastfood", "Indian", "Vietnamese", "Thai", "Mexican", "Turkish", "Mediterranean", "Tibetan"}; //Cuisines dürfen keine Abstände haben, sonst funktioniert API nicht
         Collections.addAll(cuisines, array);
         String location = LocationGetter.getGeoLocation();
 
@@ -181,7 +183,7 @@ public class Fx extends Application {
                 }
 
 
-                Restaurant restaurant = Main.chooseOne(Main.readRestaurants(), desiredCuisines);
+                Restaurant restaurant = Main.chooseOne(Main.readRestaurants());
                 String photoReference = restaurant.getPhotoReference();
                 if(photoReference != null) {
                     PhotoRequest.requestPhoto(photoReference);
@@ -256,6 +258,14 @@ public class Fx extends Application {
                     start(primaryStage);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
+                }
+            }
+        });
+
+        root.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            public void handle(KeyEvent ke) {
+                if (ke.getCode() == KeyCode.ENTER) {
+                    btn1.fire();
                 }
             }
         });
