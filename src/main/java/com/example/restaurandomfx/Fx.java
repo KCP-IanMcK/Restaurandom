@@ -247,7 +247,7 @@ public class Fx extends Application {
 
                 primaryStage.show();
             }
-        });
+        }});
 
         resetBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
