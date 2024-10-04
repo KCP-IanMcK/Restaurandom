@@ -166,6 +166,11 @@ public class Fx extends Application {
                         desiredCuisines.add(checkBox.getText());
                     }
                 }
+                for (RadioButton radioButton : radioButtonsPricing) {
+                    if (radioButton.isSelected()) {
+                        priceLevel = radioButton.getText();
+                    }
+                }
 
                 for (RadioButton radioButton : radioButtonsPricing) {
                     if (radioButton.isSelected()) {
@@ -180,6 +185,7 @@ public class Fx extends Application {
                     manualLocation = manualLocation.replace(" ", "");
                     GoogleAPIRequest.googleAPIRequest(desiredCuisines, manualLocation, array, priceLevel);
                 }
+
 
                 Restaurant restaurant = Main.chooseOne(Main.readRestaurants(), desiredCuisines);
                 String photoReference = restaurant.getPhotoReference();
