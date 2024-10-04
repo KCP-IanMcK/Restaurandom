@@ -173,6 +173,7 @@ public class Fx extends Application {
                     String manualLocation = textField.getText();
                     manualLocation = manualLocation.replace(" ", "");
                     GoogleAPIRequest.googleAPIRequest(desiredCuisines, manualLocation, array, priceLevel);
+                }
                 for (RadioButton radioButton : radioButtonsPricing) {
                     if (radioButton.isSelected()) {
                         priceLevel = radioButton.getText();
@@ -247,7 +248,7 @@ public class Fx extends Application {
 
                 primaryStage.show();
             }
-        }});
+        });
 
         resetBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
