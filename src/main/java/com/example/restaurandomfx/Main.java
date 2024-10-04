@@ -5,7 +5,6 @@ import com.google.gson.Gson;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import com.google.gson.GsonBuilder;
@@ -32,7 +31,7 @@ public class Main extends Fx {
         return restaurants;
     }
 
-    public static Restaurant chooseOne(Restaurant[] restaurants, List<String> desiredCuisines) {
+    public static Restaurant chooseOne(Restaurant[] restaurants) {
         if (firstTime) {
             availableOptions.addAll(Arrays.asList(restaurants));
             firstTime = false;
