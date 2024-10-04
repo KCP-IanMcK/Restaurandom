@@ -14,10 +14,11 @@ import org.json.JSONObject;
 public class GoogleAPIRequest {
 
 
-    public static void googleAPIRequest(List<String> desiredCuisines, String locationString, String[] allCuisines) {
+    public static void googleAPIRequest(List<String> desiredCuisines, String locationString, String[] allCuisines, String priceLevel) {
         String apiKey = "AIzaSyBOklWQxqMKLHvS_slwXrMGpC9RPgI01cc";
         String location = locationString;
-        int radius = 200;
+        String maxprice = "";
+        int radius = 20000;
         String finalDesiredCuisines = "";
         if(desiredCuisines.toString().equals("[Select all]")) {
             desiredCuisines.addAll(List.of(allCuisines));
@@ -28,10 +29,20 @@ public class GoogleAPIRequest {
         }
         String keyword = finalDesiredCuisines;
         System.out.println("Desired cuisines: " + desiredCuisines);
+
+        if (priceLevel.equals("2") || priceLevel.equals("3")) {
+            maxprice = priceLevel;
+        } else if (priceLevel.equals("4 (expensive)")) {
+            maxprice = "4";
+        } else {
+            maxprice = "1";
+        }
+
+        System.out.println(maxprice);
         try {
             String urlString = String.format(
-                    "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%s&radius=%d&type=restaurant&keyword=%s&fields=name,formatted_address,types,photos,price_level,opening_hours,geometry&key=%s",
-                    location, radius, keyword, apiKey
+                    "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%s&radius=%d&type=restaurant&keyword=%s&maxprice=%s&fields=name,formatted_address,types,photos,price_level,opening_hours,geometry&key=%s",
+                    location, radius, keyword, maxprice, apiKey
             );
 
             URL url = new URL(urlString);

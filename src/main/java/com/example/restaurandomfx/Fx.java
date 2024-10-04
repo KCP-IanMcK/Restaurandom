@@ -69,6 +69,32 @@ public class Fx extends Application {
         wrapCuisines.getChildren().add(cuisineLabel);
         wrapCuisines.getChildren().add(scrollPaneCuisines);
 
+        //Pricing Component ----------------------------------------------------
+        VBox wrapPricing = new VBox();
+        wrapPricing.setAlignment(Pos.CENTER);
+        VBox vboxPricing = new VBox();
+        ToggleGroup toggleGroupPricing = new ToggleGroup();
+        List<RadioButton> radioButtonsPricing = new ArrayList<>();
+
+        for (int i = 1; i < 5; i++) {
+            RadioButton radioButton = new RadioButton(String.valueOf(i));
+            vboxPricing.getChildren().add(radioButton);
+            toggleGroupPricing.getToggles().add(radioButton);
+            radioButtonsPricing.add(radioButton);
+        }
+        toggleGroupPricing.getToggles().getLast().setSelected(true);
+        radioButtonsPricing.getFirst().setText("1 (cheap)");
+        radioButtonsPricing.getLast().setText("4 (expensive)");
+
+        ScrollPane scrollPanePricing = new ScrollPane(vboxPricing);
+        scrollPanePricing.setMinWidth(scene.getWidth() / 10);
+        scrollPanePricing.setMaxHeight(scene.getHeight() / 5);
+        scrollPanePricing.setStyle("-fx-background-color:#FFFFFF;");
+        Label pricingLabel = new Label("Max Pricing:");
+        pricingLabel.setTextFill(Color.WHITE);
+        pricingLabel.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, scene.getWidth() / 50));
+        wrapPricing.getChildren().add(pricingLabel);
+        wrapPricing.getChildren().add(scrollPanePricing);
 
         //Titel --------------------------------------------------------------------
         File file = new File("src/main/resources/RestaurandomLogo.png");
@@ -83,6 +109,7 @@ public class Fx extends Application {
         //Adding all middle Components ----------------------------------------------
         hBox2.getChildren().add(btn1);
         hBox2.getChildren().add(wrapCuisines);
+        hBox2.getChildren().add(wrapPricing);
         hBox2.setAlignment(Pos.CENTER);
 
         root.setTop(hBox);
@@ -100,6 +127,7 @@ public class Fx extends Application {
             @Override
             public void handle(ActionEvent actionEvent) {
                 List<String> desiredCuisines = new ArrayList<>();
+                String priceLevel = "";
 
                 for (CheckBox checkBox : checkBoxesCuisines) {
                     if (checkBox.isSelected()) {
@@ -107,8 +135,13 @@ public class Fx extends Application {
                     }
                 }
 
-                if(Main.firstTime) { //Muss nur das erste mal eine Request senden, nachher kannn es das Json auslesen
-                    GoogleAPIRequest.googleAPIRequest(desiredCuisines, location, array);
+                for (RadioButton radioButton : radioButtonsPricing) {
+                    if (radioButton.isSelected()) {
+                        priceLevel = radioButton.getText();
+                    }
+                }
+                if(Main.firstTime) { //Muss nur das erste mal eine Request senden, nachher kann es das Json auslesen
+                    GoogleAPIRequest.googleAPIRequest(desiredCuisines, location, array, priceLevel);
                 }
 
                 Restaurant restaurant = Main.chooseOne(Main.readRestaurants(), desiredCuisines);
@@ -224,6 +257,25 @@ public class Fx extends Application {
                         } else {
                             boxesCuisine.setTextFill(Color.BLACK);
                             boxesCuisine.setStyle("-fx-background-color: #FFFFFF");
+                        }
+                    }
+                }
+            });
+        }
+        radioButtonsPricing.getLast().setTextFill(Color.WHITE);
+        radioButtonsPricing.getLast().setStyle("-fx-background-color: #7B1FA2");
+
+        for (RadioButton radioButton : radioButtonsPricing) {
+            radioButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    for (RadioButton radioButton1 : radioButtonsPricing) {
+                        if(radioButton1.isSelected()){
+                            radioButton1.setTextFill(Color.WHITE);
+                            radioButton1.setStyle("-fx-background-color: #7B1FA2");
+                        } else {
+                            radioButton1.setTextFill(Color.BLACK);
+                            radioButton1.setStyle("-fx-background-color: #FFFFFF");
                         }
                     }
                 }
