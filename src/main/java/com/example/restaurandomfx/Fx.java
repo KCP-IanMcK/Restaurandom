@@ -127,6 +127,18 @@ public class Fx extends Application {
         wrapPricing.getChildren().add(pricingLabel);
         wrapPricing.getChildren().add(scrollPanePricing);
 
+        //Distance Component ----------------------------------------------------
+        VBox wrapRadius = new VBox();
+        wrapRadius.setAlignment(Pos.CENTER);
+        TextField radiusTextField = new TextField();
+        Label radiusLabel = new Label("Max radius in m:");
+        radiusLabel.setTextFill(Color.WHITE);
+        radiusLabel.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, scene.getWidth() / 50));
+        radiusTextField.setPromptText("Default = 2000");
+        wrapRadius.getChildren().add(radiusLabel);
+        wrapRadius.getChildren().add(radiusTextField);
+
+
         //Titel --------------------------------------------------------------------
         File file = new File("src/main/resources/RestaurandomLogo.png");
         Image logo = new Image(file.toURI().toString());
@@ -138,6 +150,7 @@ public class Fx extends Application {
         hBox.setPadding(new Insets(20, 0, 0, 0));
 
         //Adding all middle Components ----------------------------------------------
+        hBox2.getChildren().add(wrapRadius);
         hBox2.getChildren().add(wrapLocations);
         hBox2.getChildren().add(btn1);
         hBox2.getChildren().add(wrapCuisines);
@@ -160,6 +173,7 @@ public class Fx extends Application {
             public void handle(ActionEvent actionEvent) {
                 List<String> desiredCuisines = new ArrayList<>();
                 String priceLevel = "";
+                String radius = "2000";
 
                 for (CheckBox checkBox : checkBoxesCuisines) {
                     if (checkBox.isSelected()) {
@@ -178,12 +192,16 @@ public class Fx extends Application {
                     }
                 }
 
+                if (!radiusTextField.getText().isEmpty()){
+                    radius = radiusTextField.getText();
+                }
+
                 if(Main.firstTime && rBAuto.isSelected()) { //Muss nur das erste mal eine Request senden, nachher kannn es das Json auslesen
-                    GoogleAPIRequest.googleAPIRequest(desiredCuisines, location, array, priceLevel);
+                    GoogleAPIRequest.googleAPIRequest(desiredCuisines, location, radius, priceLevel);
                 } else if (Main.firstTime && rBManual.isSelected()) {
                     String manualLocation = textField.getText();
                     manualLocation = manualLocation.replace(" ", "");
-                    GoogleAPIRequest.googleAPIRequest(desiredCuisines, manualLocation, array, priceLevel);
+                    GoogleAPIRequest.googleAPIRequest(desiredCuisines, manualLocation, radius, priceLevel);
                 }
 
 
@@ -353,5 +371,8 @@ public class Fx extends Application {
                 }
             });
         }
+
+        radiusTextField.setStyle("-fx-focus-color: #7B1FA2;");
+        textField.setStyle("-fx-focus-color: #7B1FA2;");
     }
 }

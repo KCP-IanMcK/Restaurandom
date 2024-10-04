@@ -14,11 +14,10 @@ import org.json.JSONObject;
 public class GoogleAPIRequest {
 
 
-    public static void googleAPIRequest(List<String> desiredCuisines, String locationString, String[] allCuisines, String priceLevel) {
+    public static void googleAPIRequest(List<String> desiredCuisines, String locationString, String radius, String priceLevel) {
         String apiKey = "AIzaSyBOklWQxqMKLHvS_slwXrMGpC9RPgI01cc";
         String location = locationString;
         String maxprice = "";
-        int radius = 2000;
         String finalDesiredCuisines = "";
         if(desiredCuisines.toString().equals("[Select all]")) {
             finalDesiredCuisines = "Restaurant";
@@ -41,7 +40,7 @@ public class GoogleAPIRequest {
         System.out.println(maxprice);
         try {
             String urlString = String.format(
-                    "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%s&radius=%d&type=restaurant&keyword=%s&maxprice=%s&fields=name,formatted_address,types,photos,price_level,opening_hours,geometry&key=%s",
+                    "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%s&radius=%s&type=restaurant&keyword=%s&maxprice=%s&fields=name,formatted_address,types,photos,price_level,opening_hours,geometry&key=%s",
                     location, radius, keyword, maxprice, apiKey
             );
 
